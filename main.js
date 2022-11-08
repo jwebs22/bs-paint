@@ -15,7 +15,7 @@
  * To make the second one happen, the number to change
  * is the first argument to `repeat`, currently set at 10.
  */
-const gridWidth = 10;
+const gridWidth = 30;
 let count = 0;
 while (count <= gridWidth * gridWidth) {
   const canvas = document.querySelector('.canvas');
@@ -25,49 +25,57 @@ while (count <= gridWidth * gridWidth) {
   count++;
 }
 
-// You probably should NOT do these in the order below.
-// That is, you probably should NOT do all the queries,
-// THEN all the functions,
-// THEN all the wiring.
-
-// Instead, it'll be easier if you go one action at a time!
-// So, add a query for the palette colors.
-// THEN add an event listener function for what happens when one is clicked.
-// THEN wire those two together, so that when the palette elements are clicked,
-// the function runs.
-//
-// And proceed from there to getting the squares working.
-//
-
-// ALSO.
-// You do not have to follow the sections below. If you're doing your functions inline, it doesn't make a lot of sense to separate the event listener functions from their wiring!
-
-/***********
- * QUERIES *
-***********/
-
-// Add queries for all your squares, palette colors, and brush here.
-// (Note the singular or plural used in that sentence!)
+let app = document.querySelector(".app");
+let brush = document.querySelector(".current-brush");
+let palette = document.querySelectorAll(".palette div");
+let canvasSquares = document.querySelectorAll(".square");
+let clear = document.querySelector("#clear")
+let mouseDown = false;
 
 
+//choose color
 
-/****************************
- * EVENT LISTENER FUNCTIONS *
-****************************/
+for (let i = 0; i < palette.length; i++) {
+  palette[i].addEventListener("click", function () {
+    console.log(palette[i].classList);
+    brush.classList.replace(brush.classList[1], palette[i].classList[1]);
+  })
+}
 
-// Now add some functions to handle clicking one particular square
-// and clicking one particular palette color. You can leave them
-// empty at first, though a console.log just to know they're being
-// run as event listeners (after the next step is set up) isn't a
-// bad idea for testing purposes.
+//paint
 
+for (let i = 0; i < canvasSquares.length; i++) {
+  canvasSquares[i].addEventListener("click", function () {
+    if (mouseDown === false) {
+      canvasSquares[i].classList.replace(canvasSquares[i].classList[1], brush.classList[1]);
+    }
+  })
+}
 
+app.addEventListener("mousedown", function () {
+  mouseDown = true;
+})
 
-/**************************
- * WIRING IT ALL TOGETHER *
-**************************/
+app.addEventListener("mouseup", function () {
+  mouseDown = false;
+})
 
-// Now: wiring up our event listeners to our html node elements.
-// You'll need to add the appropriate event listener for each
-// square and for each palette color from the functions you
-// wrote above.
+for (let i = 0; i < canvasSquares.length; i++) {
+  canvasSquares[i].addEventListener("mouseover", function () {
+    if (mouseDown === true) {
+      canvasSquares[i].classList.replace(canvasSquares[i].classList[1], brush.classList[1]);
+    }
+  })
+}
+
+//clear canvas
+for (let i = 0; i < canvasSquares.length; i++) 
+{
+  clear.addEventListener("click", function () 
+  {
+    if (mouseDown === false) 
+    {
+      canvasSquares[i].classList.replace(canvasSquares[i].classList[1], "whitesmoke")
+    }
+  })
+}
